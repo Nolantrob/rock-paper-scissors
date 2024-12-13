@@ -20,7 +20,7 @@ const scissorsButton = document.querySelector('.js-scissors-button');
 const humanHandContainer = document.querySelector('.current-round-human-hand-container');
 const computerHandContainer = document.querySelector('.current-round-computer-hand-container');
 
-// Handles game logic
+// Event listeners for the 3 hand buttons
 rockButton.addEventListener('click', () => {
     playGame('rock');
 });
@@ -33,64 +33,60 @@ scissorsButton.addEventListener('click', () => {
     playGame('scissors');
 });
 
+const getComputerChoice = () => {
+    const keys = Object.keys(hands);
+    const randomIndex = Math.floor(Math.random() * 3);
+    return keys[randomIndex];
+}
 
 function playGame(humanChoice) {
 
-    const possibleHands = ['rock', 'paper', 'scissors'];
-    const getComputerChoice = () => possibleHands[Math.floor(Math.random() * 3)];
-    // const getComputerChoice = () => hands.keys[Math.floor(Math.random() * 3)];
-
-
     const computerChoice = getComputerChoice();
 
-    function humanWins() {
+    const humanWins = () => {
         score.wins++;
         updateScore();
     };
 
-    function humanLoses() {
+    const humanLoses = () => {
         score.losses++;
         updateScore();
     };
 
-    function itsADraw() {
+    const itsADraw = () => {
         score.draws++;
         updateScore();
     };
 
+    // Display the human's and computer's hands for this round
 
-    function showCurrentRoundHumanHand(hand) {
-        switch (hand) {
+    const showCurrentRoundHands = (humanHand,compHand) => {
+        switch (humanHand) {
             case 'rock':
-                humanHandContainer.innerHTML = `Human: <span class="human-hand-round-icon">${hands.rock}</span>`;
+                humanHandContainer.innerHTML = `Human - <span class="human-hand-round-icon">${hands.rock}</span>`;
                 break;
             case 'paper':
-                humanHandContainer.innerHTML = `Human: <span class="human-hand-round-icon">${hands.paper}</span>`;
+                humanHandContainer.innerHTML = `Human - <span class="human-hand-round-icon">${hands.paper}</span>`;
                 break;
             case 'scissors':
-                humanHandContainer.innerHTML = `Human: <span class="human-hand-round-icon">${hands.scissors}</span>`;
+                humanHandContainer.innerHTML = `Human - <span class="human-hand-round-icon">${hands.scissors}</span>`;
                 break;
         }
-    }
-    
 
-    function showCurrentRoundComputerHand(compHand) {
         switch (compHand) {
             case 'rock':
-                computerHandContainer.innerHTML = `<span class="comp-hand-round-icon">${hands.rock}</span> :Computer`;
+                computerHandContainer.innerHTML = `<span class="comp-hand-round-icon">${hands.rock}</span> - Computer`;
                 break;
             case 'paper':
-                computerHandContainer.innerHTML = `<span class="comp-hand-round-icon">${hands.paper}</span> :Computer`;
+                computerHandContainer.innerHTML = `<span class="comp-hand-round-icon">${hands.paper}</span> - Computer`;
                 break;
             case 'scissors':
-                computerHandContainer.innerHTML = `<span class="comp-hand-round-icon">${hands.scissors}</span> :Computer`;
+                computerHandContainer.innerHTML = `<span class="comp-hand-round-icon">${hands.scissors}</span> - Computer`;
                 break;
         }
     }
 
-
-    showCurrentRoundHumanHand(humanChoice);
-    showCurrentRoundComputerHand(computerChoice);
+    showCurrentRoundHands(humanChoice,computerChoice);
     if (humanChoice === computerChoice) {
         itsADraw();
     } else {
@@ -116,25 +112,63 @@ function playGame(humanChoice) {
     }
 }
 
+let isAutoPlaying = false;
+let intervalId;
+
+// Update and reset score logic
 
 function updateScore(){
 
     const scoreBoardContainer = document.querySelector('.score-container');
 
-    scoreBoardContainer.innerHTML = `Score:
-    Wins: ${score.wins} Losses: ${score.losses} Draws: ${score.draws}
+    scoreBoardContainer.innerHTML = `
+        <div>Wins: <b>${score.wins}</b></div>
+        <div>Losses: <b>${score.losses}</b></div>
+        <div>Draws: <b>${score.draws}</b></div>
     `;
 
     const resetButton = document.querySelector('.reset-button');
 
-    resetButton.addEventListener('click', () => {
+    const resetScore = () => {
         score.wins = 0;
         score.losses = 0;
         score.draws = 0;
-        humanHandContainer.innerHTML = '';
-        computerHandContainer.innerHTML = '';
+    }
+
+
+    resetButton.addEventListener('click', () => {
+        resetScore();
+        humanHandContainer.textContent = 'Choose a hand to begin!';
+        computerHandContainer.textContent = '';
         updateScore();
     });
 
 
 }
+
+
+// Auto-Play logic
+
+const autoPlayButton = document.querySelector('.auto-play-button');
+autoPlayButton.addEventListener('click', () => {
+    autoPlay();
+});
+
+
+function autoPlay() {
+
+    if (isAutoPlaying){
+        clearInterval(intervalId);
+        isAutoPlaying = false;
+        autoPlayButton.textContent = 'AUTO-PLAY';
+    } else {
+        playGame(getComputerChoice())
+        intervalId = setInterval(() => {
+            playGame(getComputerChoice())
+        },500);
+        isAutoPlaying = true;
+        autoPlayButton.textContent = 'STOP';
+    }
+
+}
+

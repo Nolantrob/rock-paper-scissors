@@ -3,7 +3,7 @@
 }
 
 body {
-    background-color: rgb(6, 6, 24);
+    background-color: rgb(56, 35, 65);
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -11,7 +11,7 @@ body {
 
 .page-title {
     color: white;
-    margin-bottom: 80px;
+    margin-bottom: 70px;
 }
 
 .hand-selection-container {
@@ -36,15 +36,20 @@ body {
     justify-content: center;
 }
 
-.hand-button:hover,.reset-button:hover {
+.hand-button:hover,
+.reset-button:hover,
+.auto-play-button:hover {
     background-color: rgba(255, 255, 255, 0.116);
 }
 
-.hand-button:active,.reset-button:active {
+.hand-button:active,
+.reset-button:active,
+.auto-play-button:active {
     background-color: rgba(255, 255, 255, 0.247);
 }
 
 .current-round-hand-container {
+    /* border: 1px solid red; */
     color: white;
     font-size: 40px;
     display: flex;
@@ -54,7 +59,9 @@ body {
 
 .current-round-human-hand-container,
 .current-round-computer-hand-container {
+    /* border: 1px solid red; */
     display: flex;
+    font-weight: bold;
     align-items: center;
     gap: 30px;
 }
@@ -72,21 +79,19 @@ body {
 }
 
 .score-container {
+    /* border: 1px solid red; */
     color: white;
     font-size: 30px;
-    position: absolute;
     bottom: 50px;
-    /* border: 1px solid red; */
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 30px;
-    position: absolute;
-    bottom: 100px;
+    gap: 40px;
 }
 
-.reset-button {
+.reset-button,
+.auto-play-button {
     font-size: 30px;
+    font-weight: bolder;
     border: 1px solid white;
     color: white;
     background-color: transparent;
@@ -94,6 +99,18 @@ body {
     padding: 10px;
     cursor: pointer;
     width: 300px;
-    position: absolute;
-    bottom: 20px;
+}
+
+.game-menu-button-container {
+    /* border: 1px solid red; */
+    display: flex;
+    gap: 30px;
+}
+
+.results-and-menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 90px;
 }
